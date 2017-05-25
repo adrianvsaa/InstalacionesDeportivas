@@ -1,11 +1,11 @@
 package paquete;
 
-import java.util.Calendar;
-
+import java.util.*;
 
 public class Usuario extends Persona {
 	private Calendar fechaAlta;
 	private float saldo;
+	private LinkedList<Grupo> actividadesActuales;
 	
 	public Usuario(String DNI, String nombre, String apellidos, Calendar fechaNacimiento, Calendar fechaAlta, float saldo){
 		super(DNI, nombre, apellidos, fechaNacimiento);
@@ -27,5 +27,9 @@ public class Usuario extends Persona {
 
 	public void setSaldo(float saldo) {
 		this.saldo = saldo;
+	}
+	
+	public void setActividadesActuales(LinkedList<Grupo> actividadesActuales){
+		this.actividadesActuales = actividadesActuales;
 	}
 }
