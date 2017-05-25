@@ -1,0 +1,93 @@
+***************************************************************************
+*MONITOR:  InsertaPersona monitor nombre apellidos fecha1 horasAsig
+*Usuario: InsertaPersona usuario nombre apellidos fecha1 fecha2 saldo
+****************************************************************************
+*     Resultados:
+*	1 - Comando incorrecto 
+*	2 - Numero de argumentos incorrecto
+*     3 - Fecha incorrecta
+* 	4 - Numero de horas incorrecto
+*	5 - OK
+*  
+1 InsertPersona monitor  "J Antonio"  "Lopez Fernandez"  10/2/1972  20
+2 InsertaPersona monitor  " J Antonio  Lopez Fernandez"   10/02/1972  20
+*
+3 InsertaPersona monitor  "J Antonio"  " Lopez Fernandez"  10/02/2972   20 
+4 InsertaPersona monitor  "J Antonio"  " Lopez Fernandez"  10/02/1972   21
+*
+5 InsertaPersona monitor  "J Antonio"  " Lopez Fernandez"  10/02/1972   14
+*
+*******************************************************************
+*     AsignarMonitorGrupo persona actividad grupo
+*
+*     Resultados
+* 	6 - Monitor inexistente 
+* 	7 - Actividad inexistente
+* 	8 - Grupo inexistente
+*     9 – OK
+* 	10 - Grupo ya asignado
+* 	11 - Horas asignables superior al máximo
+* 	12 - Se genera solape (Tenis con Baloncesto de 14 a 15)
+*
+* 
+6  AsignarMonitorGrupo 4 4 1
+7  AsignarMonitorGrupo 5 9 1
+8  AsignarMonitorGrupo 5 4 8
+9  AsignarMonitorGrupo 5 4 6
+10 AsignarMonitorGrupo 5 4 6
+11 AsignarMonitorGrupo 2 3 3
+12 AsignarMonitorGrupo 5 5 6
+*
+*********************************************************
+*           Alta usuario actividad 
+*
+*      13 - Usuario inexistente
+*      14 - Actividad inexistente
+*      15 - Ya es usuario de la actividad indicada
+*      16 - No cumple requisitos
+*      17 – OK
+*      18 - OK
+*
+13 Alta 11 1
+14 Alta 3 10
+15 Alta 4 1
+16 Alta 4 4
+17 Alta 3 5
+18 Alta 3 3
+*
+*
+******************************************************
+*      AsignaGrupo usuario actividad grupo 
+* 
+*            19 - Usuario inexistente
+*            20 - Actividad inexistente
+*            21 - Usuario no dado de alta en la actividad
+*            22 - Grupo inexistente
+*            23 - Se genera solape
+*            24 – OK
+*            25 - OK
+*
+19 AsignaGrupo 11 1 1
+20 AsignaGrupo 3 7 2
+21 AsignaGrupo 3 2 3
+22 AsignaGrupo 3 5 8
+23 AsignaGrupo 3 5 2
+24 AsignaGrupo 3 5 3
+25 AsignaGrupo 3 3 4
+*
+*
+******************************************************
+*         Cobrar usuario ficheroActiv 
+*  
+*     26 - Usuario inexistente 
+*     27 - Fichero de actividades inexistente 
+*     28 – OK. 
+*        – Mensajes por cada una de las 4 lineas del fichero:
+*          Linea 1 - Actividad no existente  
+*          Linea 2 - OK
+*          Linea 3 - Saldo insuficiente para pagar la actividad
+*          Linea 4 - Saldo insuficiente para pagar la actividad
+*
+26 Cobrar 1 actividadesAcobrar.txt
+27 Cobrar 3 Acobrar.txt
+28 Cobrar 3 actividadesAcobrar.txt

@@ -1,0 +1,46 @@
+1
+Gimnasia  
+GIM
+1
+
+1
+35
+1 M 9 Pabellon1; 2  M 10 Pabellon1; 3 J 9 Pabellon1; 4 J 10 Pabellon1;5 S 9 Pabellon1; 6 S 10 Pabellon1; 7 L 20 Pabellon1; 8 X 20 Pabellon1;9 V 20 Pabellon1  
+***************************************************************************************
+2
+Natacion
+NAT
+
+
+2
+42,20
+1  L 9 Piscina1; 2  M 9 Piscina1; 3 X 9 Piscina1; 4 J 9 Piscina1;5 V 9 Piscina1; 6 S 9 Piscina1; 7 D 9 Piscina1;  8  L 20 Piscina2; 9  M 20 Piscina2; 10 X 20 Piscina2; 11 J 20 Piscina2;12 V 20 Piscina2; 13 S 20 Piscina2; 14 D 20 Piscina2 
+***************************************************************************************
+3
+Vela
+VEL
+2
+1,2
+2
+120
+1  L 12 Nautico; 2  M 12 Nautico; 3 X 12 Nautico; 4 J 12 Nautico;5 V 12 Nautico; 6 S 12 Nautico; 7 D 12   Nautico
+***************************************************************************************
+4
+Tenis
+TEN
+
+1
+2
+80
+1  L 13  Pista1; 2  M 13  Pista1; 3 X 13 Pista1; 4 J 13  Pista1;5 V 13 Pista1; 6 S 13 Pista1; 7 D 13  Pista1
+***************************************************************************************
+5
+Baloncesto
+BAL
+
+1
+2
+65
+1  L 14  Pabellon2; 2  M 14  Pabellon2; 3 X 14 Pabellon2; 4 J 14  Pabellon2; 5 V 14 Pabellon2; 6 S 14 Pabellon2; 7 D 14   Pabellon2
+
+
