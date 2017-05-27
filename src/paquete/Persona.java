@@ -1,5 +1,8 @@
 package paquete;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public abstract class Persona {
@@ -47,14 +50,24 @@ public abstract class Persona {
 	}
 
 
-	public Calendar getFechaNacimiento() {
-		return fechaNacimiento;
+	public String getFechaNacimiento() {
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return format.format(fechaNacimiento.getTime());
 	}
 
 
 	public void setFechaNacimiento(Calendar fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-	
+
+	public String toString(){
+		return "Identificador: "+DNI+"\n" +
+				"Nombre: "+nombre+"\n" +
+				"Apellidos: "+apellidos+"\n"+
+				"fechaNacimiento"+fechaNacimiento+"\n";
+	}
+
+	public abstract void salidaFichero(BufferedWriter bf) throws IOException;
+
 	
 }
