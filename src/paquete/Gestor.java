@@ -29,8 +29,10 @@ public class Gestor {
 					asignaMonitorGrupo(comando);
 					break;
 				case "alta":
+					altaUsuario(comando);
 					break;
 				case "asignagrupo":
+					asignaGrupo(comando);
 					break;
 				case "cobrar":
 					break;
@@ -89,5 +91,18 @@ public class Gestor {
 		if(!gestorErrores.asignaMonitorGrupo(comando))
 			return;
 		((Monitor)mapaPersonas.get(comando[2])).addGrupo(Integer.parseInt(comando[3]), Integer.parseInt(comando[4]));
+	}
+
+	public static void altaUsuario(String[] comando) throws IOException{
+		if(!gestorErrores.altaUsuario(comando))
+			return;
+		LinkedList mapa = ((Usuario)mapaPersonas.get(comando[2])).getActividadesActuales();
+		mapa.add(new Grupo(Integer.parseInt(comando[3])));
+	}
+
+	public static void asignaGrupo(String[] comando) throws IOException{
+		if(!gestorErrores.asignaGrupo(comando))
+			return;
+
 	}
 }

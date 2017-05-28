@@ -152,4 +152,15 @@ public class Actividad {
 		return comprobacion;
 	}
 
+	public boolean hasGrupo(int idGrupo){
+		boolean comprobacion = false;
+		for(int i=0; i<grupos.size(); i++){
+			if(grupos.get(i).getIdGrupo()==idGrupo){
+				comprobacion = true;
+				break;
+			}
+		}
+		return comprobacion;
+	}
+
 }

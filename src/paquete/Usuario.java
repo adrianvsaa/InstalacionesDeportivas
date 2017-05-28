@@ -8,6 +8,15 @@ import java.util.*;
 public class Usuario extends Persona {
 	private Calendar fechaAlta;
 	private float saldo;
+
+	public LinkedList<Grupo> getActividadesActuales() {
+		return actividadesActuales;
+	}
+
+	public LinkedList<Integer> getActPrevias() {
+		return actPrevias;
+	}
+
 	private LinkedList<Grupo> actividadesActuales;
 	private LinkedList<Integer> actPrevias;
 
@@ -94,5 +103,64 @@ public class Usuario extends Persona {
 				"Saldo: "+saldo+"\n" +
 				"Actividades Previas: "+a+"\n" +
 				"Actividades Actuales: "+b;
+	}
+
+	public boolean isMatriculado(int idActividad){
+		boolean comprobacion = false;
+		for(int i=0; i<actividadesActuales.size(); i++){
+			if(actividadesActuales.get(i).getIdActividad()==idActividad){
+				comprobacion = true;
+				break;
+			}
+		}
+		return comprobacion;
+	}
+
+	public boolean isMatriculable(int idActividad){
+		boolean comprobacion = true;
+		int cont = 0;
+		for(int i=0; i<Gestor.mapaActividades.get(idActividad).getRequisitos().size(); i++){
+			for(int j=0; j<actPrevias.size(); j++){
+				if(Gestor.mapaActividades.get(idActividad).getRequisitos().get(i)==actPrevias.get(j)){
+					cont++;
+					break;
+				}
+			}
+		}
+		if(cont!=Gestor.mapaActividades.get(idActividad).getRequisitos().size())
+			comprobacion = false;
+		return comprobacion;
+	}
+
+	public boolean generaSolape(int idActividad, int idGrupo){
+		boolean comprobacion = false;
+
+		String horaInicio1 = "";
+		String dia = "";
+		int duracion1 = Gestor.mapaActividades.get(idActividad).getDuracion();
+		for(int i=0; i<Gestor.mapaActividades.get(idActividad).getGrupos().size(); i++){
+			if(Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getIdGrupo()==idGrupo){
+				horaInicio1 = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getHoraInicio();
+				dia = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getDia();
+				break;
+			}
+		}
+		int horaInicio11 = Integer.parseInt(horaInicio1.split(":")[0]);
+		for(int i=0; i<actividadesActuales.size(); i++){
+			Actividad a = Gestor.mapaActividades.get(actividadesActuales.get(i).getIdActividad());
+			LinkedList<Grupo> g = a.getGrupos();
+			for(int j=0; j<g.size(); j++){
+				if(g.get(j).getIdGrupo()==idGrupo&&g.get(j).getDia().equals(dia)){
+					String horaInicio = g.get(j).getHoraInicio();
+					int duracion = a.getDuracion();
+					int horaInicioI = Integer.parseInt(horaInicio.split(":")[0]);
+					if(horaInicio11==horaInicioI||Math.abs(horaInicio11-horaInicioI)<duracion1||Math.abs(horaInicioI-horaInicio11)<duracion){
+						comprobacion = true;
+						break;
+					}
+				}
+			}
+		}
+		return comprobacion;
 	}
 }

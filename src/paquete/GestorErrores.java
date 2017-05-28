@@ -134,4 +134,73 @@ public class GestorErrores {
         bw.flush();
         return comprobacion;
     }
+
+    public boolean altaUsuario(String[] comando) throws IOException{
+        boolean comprobacion = true;
+        if(comando.length!=4){
+            bw.write("AUSER: Número de parámetros incorrecto\n");
+            comprobacion = false;
+        }
+        else if(Gestor.mapaPersonas.get(comando[2])==null){
+            bw.write("AUSER: Usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(!(Gestor.mapaPersonas.get(comando[2]) instanceof Usuario)){
+            bw.write("AUSER: Usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(Gestor.mapaActividades.get(Integer.parseInt(comando[3]))==null){
+            bw.write("AUSER: Actividad inexistente\n");
+            comprobacion = false;
+        }
+        else if(((Usuario)Gestor.mapaPersonas.get(comando[2])).isMatriculado(Integer.parseInt(comando[3]))){
+            bw.write("AUSER: Ya es usuario de la actividad indicada\n");
+            comprobacion = false;
+        }
+        else if(!((Usuario)Gestor.mapaPersonas.get(comando[2])).isMatriculable(Integer.parseInt(comando[3]))){
+            bw.write("AUSER: No cumple requisitos\n");
+            comprobacion = false;
+        }
+        else
+            bw.write("AUSER: OK\n");
+        bw.flush();
+        return comprobacion;
+    }
+
+    public boolean asignaGrupo(String[] comando) throws IOException{
+        boolean comprobacion = true;
+        if(comando.length!=5){
+            bw.write("AGRUPO: numero de elementos incorrecto\n");
+            comprobacion = false;
+        }
+        else if(Gestor.mapaPersonas.get(comando[2])==null){
+            bw.write("AGRUPO: usuario inexistente\n");
+            comprobacion =false;
+        }
+        else if(!(Gestor.mapaPersonas.get(comando[2]) instanceof Usuario)){
+            bw.write("AGRUPO: usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(Gestor.mapaActividades.get(Integer.parseInt(comando[3]))==null){
+            bw.write("AGRUPO: actividad inexistente\n");
+            comprobacion = false;
+        }
+        else if(!((Usuario) Gestor.mapaPersonas.get(comando[2])).isMatriculado(Integer.parseInt(comando[3]))){
+            bw.write("AGRUPO: Usuario no dado de alta en la actividad\n");
+            comprobacion = false;
+        }
+        else if(!Gestor.mapaActividades.get(Integer.parseInt(comando[3])).hasGrupo(Integer.parseInt(comando[4]))){
+            bw.write("AGRUPO: Grupo inexistente\n");
+            comprobacion = false;
+        }
+        else if(((Usuario) Gestor.mapaPersonas.get(comando[2])).generaSolape(Integer.parseInt(comando[3]), Integer.parseInt(comando[4]))){
+            bw.write("AGRUPO: Genera solape\n");
+            comprobacion = false;
+        }
+        else
+            bw.write("AGRUPO: OK\n");
+        bw.flush();
+        return comprobacion;
+    }
+
 }
