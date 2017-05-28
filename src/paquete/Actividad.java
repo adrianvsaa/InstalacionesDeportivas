@@ -128,4 +128,28 @@ public class Actividad {
 		bw.flush();
 	}
 
+	public boolean existsGrupo(int idGrupo){
+		boolean comproacion = false;
+		for(int i=0; i<grupos.size(); i++){
+			if(grupos.get(i).getIdGrupo()==idGrupo){
+				comproacion = true;
+				break;
+			}
+		}
+		return comproacion;
+	}
+
+	public boolean isGrupoAsignado(int idGrupo){
+		boolean comprobacion = false;
+		Set<String> keys = Gestor.mapaPersonas.keySet();
+		for(String key : keys){
+			if(Gestor.mapaPersonas.get(key) instanceof Monitor){
+				if(((Monitor)Gestor.mapaPersonas.get(key)).isGrupoAsignado(this.identificador, idGrupo)){
+					comprobacion = true;
+				}
+			}
+		}
+		return comprobacion;
+	}
+
 }

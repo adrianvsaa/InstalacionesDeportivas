@@ -16,15 +16,17 @@ public class Gestor {
 		Actividades.poblar();
 
 		Scanner entrada = new Scanner(fichero);
-
+		System.out.println(mapaPersonas.size());
 		while(entrada.hasNextLine()){
 			String[] comando = entrada.nextLine().trim().split("\\s+");
-
+			if(comando[0].charAt(0)=='*')
+				continue;
 			switch (comando[1].toLowerCase()){
 				case "insertapersona":
 					insertaPersona(comando);
 					break;
 				case "asignarmonitorgrupo":
+					asignaMonitorGrupo(comando);
 					break;
 				case "alta":
 					break;
@@ -41,20 +43,51 @@ public class Gestor {
 				case "ordenausuariosxsaldo":
 					break;
 				default:
-					if(comando[1].charAt(0)=='*')
-						break;
 					gestorErrores.ComandoIncorrecto();
 
 			}
 		}
+		Personas.imprimirFichero();
 
-		Personas.imprimirPersonas();
-		Actividades.imprimirActividades();
+
+		//Personas.imprimirPersonas();
+		//Actividades.imprimirActividades();
 	}
 
-	public static void insertaPersona(String[] comando){
+	public static void insertaPersona(String[] comando) throws IOException{
 		if(!gestorErrores.insertaPersona(comando))
 			return;
+		String com = "";
+		for(int i=0; i<comando.length; i++)
+			com += comando[i] + " ";
+		String[] a1 =com.split("\"")[0].trim().split("\\s+");
+		String[] a2 = com.split("\"");
+		String[] a3 = com.split("\"")[4].trim().split("\\s+");
+		int tMapa = mapaPersonas.size();
+		if(a1[2].equals("monitor")){
+			Calendar fechaNac = Calendar.getInstance();
+			fechaNac.set(Integer.parseInt(a3[0].split("/")[2]),
+					Integer.parseInt(a3[0].split("/")[1]),
+					Integer.parseInt(a3[0].split("/")[0]));
+			mapaPersonas.put(Integer.toString(mapaPersonas.size()+1), new Monitor(Integer.toString(mapaPersonas.size()+1), a2[1], a2[3], fechaNac, Integer.parseInt(a3[1])));
+		}
+		else{
+			Calendar fechaNac = Calendar.getInstance();
+			fechaNac.set(Integer.parseInt(a3[0].split("/")[2]),
+					Integer.parseInt(a3[0].split("/")[1]),
+					Integer.parseInt(a3[0].split("/")[0]));
+			Calendar fechaAlta = Calendar.getInstance();
+			fechaAlta.set(Integer.parseInt(a3[1].split("/")[2]),
+					Integer.parseInt(a3[1].split("/")[1]),
+					Integer.parseInt(a3[1].split("/")[0]));
+			mapaPersonas.put(Integer.toString(mapaPersonas.size()+1),
+						new Usuario(Integer.toString(mapaPersonas.size()+1), a2[1], a2[3], fechaNac, fechaAlta, Float.parseFloat(a3[2])));
+		}
+	}
 
+	public static void asignaMonitorGrupo(String[] comando) throws IOException{
+		if(!gestorErrores.asignaMonitorGrupo(comando))
+			return;
+		((Monitor)mapaPersonas.get(comando[2])).addGrupo(Integer.parseInt(comando[3]), Integer.parseInt(comando[4]));
 	}
 }

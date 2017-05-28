@@ -62,9 +62,10 @@ public abstract class Persona {
 
 	public String toString(){
 		return "Identificador: "+DNI+"\n" +
+				"Tipo: " + this.getClass() +
 				"Nombre: "+nombre+"\n" +
 				"Apellidos: "+apellidos+"\n"+
-				"fechaNacimiento"+fechaNacimiento+"\n";
+				"fechaNacimiento: "+getFechaNacimiento()+"\n";
 	}
 
 	public abstract void salidaFichero(BufferedWriter bf) throws IOException;
