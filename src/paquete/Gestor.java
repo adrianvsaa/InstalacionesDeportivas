@@ -1,5 +1,7 @@
 package paquete;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.io.File;
@@ -16,7 +18,6 @@ public class Gestor {
 		Actividades.poblar();
 
 		Scanner entrada = new Scanner(fichero);
-		System.out.println(mapaPersonas.size());
 		while(entrada.hasNextLine()){
 			String[] comando = entrada.nextLine().trim().split("\\s+");
 			if(comando[0].charAt(0)=='*')
@@ -35,21 +36,26 @@ public class Gestor {
 					asignaGrupo(comando);
 					break;
 				case "cobrar":
+					pagoActividades(comando);
 					break;
 				case "obtenercalendario":
+					obtenerCalendario(comando);
 					break;
 				case "ordenarmonitoresporcarga":
+					ordernarMonitores(comando);
 					break;
 				case "ordenaractividades":
+					ordenarActividadez(comando);
 					break;
 				case "ordenausuariosxsaldo":
+					ordenarUsuarios(comando);
 					break;
 				default:
 					gestorErrores.ComandoIncorrecto();
 
 			}
 		}
-		Personas.imprimirFichero();
+		//Personas.imprimirFichero();
 
 
 		//Personas.imprimirPersonas();
@@ -104,5 +110,96 @@ public class Gestor {
 		if(!gestorErrores.asignaGrupo(comando))
 			return;
 
+	}
+
+	public static void pagoActividades(String[] comando) throws IOException{
+		if(!gestorErrores.pagoActividades(comando))
+			return;
+	}
+
+	public static void obtenerCalendario(String[] comando) throws IOException{
+		if(!gestorErrores.obtenerCalendario(comando))
+			return;
+		File fichero = new File(comando[3]);
+		LinkedList<Grupo> grupos = ((Usuario)mapaPersonas.get(comando[2])).getActividadesActuales();
+		BufferedWriter bw = new BufferedWriter(new FileWriter(fichero, false));
+		bw.write("dia; horas; instalacion; idGrupo; actividad; instructor\n");
+		for(int i=0; i<grupos.size(); i++){
+			if(grupos.get(i).getIdGrupo()!=0){
+				LinkedList<Grupo> grupos2 = mapaActividades.get(grupos.get(i).getIdActividad()).getGrupos();
+				for(int j=0; j<grupos2.size(); j++){
+					if(grupos2.get(j).getIdGrupo()==grupos.get(i).getIdGrupo()){
+						bw.write(grupos2.get(j).getDia()+"; ");
+						bw.write(grupos2.get(j).getHoraInicio()+"; ");
+						bw.write(grupos2.get(j).getIdGrupo()+"; ");
+						bw.write(mapaActividades.get(grupos2.get(j).getIdActividad()).getNombre()+"; ");
+						//Corregir esto; esto es el coordinador no el monitor que la imparte
+						if(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador())!=null) {
+							bw.write(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador()).getNombre() + " ");
+							bw.write(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador()).getApellidos() + "\n");
+						}
+						else{
+							bw.write(" No hay instructor\n");
+						}
+					}
+				}
+
+			}
+		}
+		bw.flush();
+	}
+
+	public static void ordernarMonitores(String[] comando) throws IOException{
+		if(!gestorErrores.ordenarMonitores())
+			return;
+		File f = new File(comando[2]);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f, false));
+		Set<String> keys = mapaPersonas.keySet();
+		LinkedList<Monitor> monitors = new LinkedList<Monitor>();
+		for(String key : keys){
+			if(mapaPersonas.get(key) instanceof Monitor)
+				monitors.add((Monitor)mapaPersonas.get(key));
+		}
+		Collections.sort(monitors);
+		for(int i=0; i<monitors.size(); i++){
+			monitors.get(i).salidaFichero(bw);
+			if((i+1)<monitors.size())
+				bw.write("************************\n");
+		}
+		bw.flush();
+	}
+
+	public static void ordenarActividadez(String[] comando) throws IOException{
+		if(!gestorErrores.ordernarActividades())
+			return;
+		File f = new File(comando[2]);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f, false));
+		LinkedList<Actividad> a = new LinkedList<Actividad>(mapaActividades.values());
+		Collections.sort(a);
+		for(int i=0; i<a.size(); i++){
+			a.get(i).salidaFichero(bw);
+			if((i+1)<a.size())
+				bw.write("*************************\n");
+		}
+		bw.flush();
+	}
+
+	public static void ordenarUsuarios(String[] comando) throws IOException{
+		gestorErrores.ordenarUsuarios();
+		LinkedList<Usuario> users = new LinkedList<Usuario>();
+		Set<String> keys = mapaPersonas.keySet();
+		for(String key : keys){
+			if(mapaPersonas.get(key) instanceof Usuario)
+				users.add((Usuario)mapaPersonas.get(key));
+		}
+		File f = new File(comando[2]);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f, false));
+		Collections.sort(users);
+		for(int i=0; i<users.size(); i++){
+			users.get(i).salidaFichero(bw);
+			if((i+1)<users.size())
+				bw.write("*************************\n");
+		}
+		bw.flush();
 	}
 }

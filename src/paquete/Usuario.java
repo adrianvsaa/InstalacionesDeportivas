@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Usuario extends Persona {
+public class Usuario extends Persona implements Comparable<Usuario>{
 	private Calendar fechaAlta;
 	private float saldo;
 
@@ -162,5 +162,34 @@ public class Usuario extends Persona {
 			}
 		}
 		return comprobacion;
+	}
+
+	public boolean pagar(float precio){
+		if((saldo-precio)>=0){
+			saldo = saldo - precio;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public boolean hasAsignaciones(){
+		boolean comprobacion = false;
+		for(int i=0; i<actividadesActuales.size(); i++){
+			if(actividadesActuales.get(i).getIdGrupo()!=0) {
+				comprobacion = true;
+				break;
+			}
+		}
+		return comprobacion;
+	}
+
+	@Override
+	public int compareTo(Usuario o) {
+		if(getSaldo()<o.getSaldo())
+			return 1;
+		else
+			return -1;
 	}
 }

@@ -91,3 +91,21 @@
 26 Cobrar 1 actividadesAcobrar.txt
 27 Cobrar 3 Acobrar.txt
 28 Cobrar 3 actividadesAcobrar.txt
+******************************************************
+*         Obtener calendario
+*
+33 ObtenerCalendario 1 calendario.txt
+34 ObtenerCalendario 6 calendario.txt
+35 ObtenerCalendario 3 calendario.txt
+******************************************************
+*         Ordenar Monitores por carga
+*
+36 OrdenarMonitoresPorCarga carga_monitores.txt
+******************************************************
+*         Ordenar Actividades por nÃºmero de usuarios dados de alta
+*
+37 OrdenarActividades carga_actividades.txt
+*******************************************************
+*         Ordenar usuarios por saldo
+*
+38 OrdenaUsuariosXSaldo usuarios.txt

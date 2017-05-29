@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class Actividad {
+public class Actividad implements Comparable<Actividad>{
 	private int identificador;
 	private String nombre;
 	private String siglas;
@@ -163,4 +163,27 @@ public class Actividad {
 		return comprobacion;
 	}
 
+	public int calcularUsuarios(){
+		int x =0;
+		Set<String> keys = Gestor.mapaPersonas.keySet();
+		for(String key : keys){
+			if(Gestor.mapaPersonas.get(key) instanceof Usuario) {
+				LinkedList<Grupo> actividades = ((Usuario) Gestor.mapaPersonas.get(key)).getActividadesActuales();
+				for(int i=0; i<actividades.size(); i++){
+					if(actividades.get(i).getIdActividad() == this.identificador)
+						x++;
+				}
+			}
+		}
+
+		return x;
+	}
+
+	@Override
+	public int compareTo(Actividad o) {
+		if(calcularUsuarios()<o.calcularUsuarios())
+			return 1;
+		else
+			return -1;
+	}
 }

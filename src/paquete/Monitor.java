@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class Monitor extends Persona {
+public class Monitor extends Persona implements Comparable<Monitor>{
 	private int horasAsignables;
 	private LinkedList<Grupo> gruposImpartidos;
 
@@ -101,4 +101,22 @@ public class Monitor extends Persona {
 	public void addGrupo(int idActividad, int idGrupo){
 		gruposImpartidos.add(new Grupo(idActividad, idGrupo));
 	}
+
+
+	public int calcularHoras(){
+		int ret = 0;
+		for(int i=0; i<gruposImpartidos.size(); i++){
+			ret += Gestor.mapaActividades.get(gruposImpartidos.get(i).getIdActividad()).getDuracion();
+		}
+		return ret;
+	}
+
+	@Override
+	public int compareTo(Monitor o) {
+		if(calcularHoras()<o.calcularHoras())
+			return 1;
+		else
+			return -1;
+	}
 }
+

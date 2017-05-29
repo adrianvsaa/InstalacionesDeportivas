@@ -5,10 +5,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Scanner;
+import java.util.Set;
 
 public class GestorErrores {
     private final static File fichero = new File("ficheros/avisos.txt");
     private BufferedWriter bw;
+
     public GestorErrores(){
         try {
             bw = new BufferedWriter(new FileWriter(fichero, true));
@@ -87,7 +90,6 @@ public class GestorErrores {
         bw.flush();
         return comprobacion;
     }
-
 
     public boolean asignaMonitorGrupo(String[] comando) throws IOException{
         boolean comprobacion = true;
@@ -201,6 +203,115 @@ public class GestorErrores {
             bw.write("AGRUPO: OK\n");
         bw.flush();
         return comprobacion;
+    }
+
+    public boolean pagoActividades(String[] comando) throws IOException{
+        boolean comprobacion = true;
+        File fichero = new File(comando[3]);
+        if(comando.length!=4){
+            bw.write("GCOBRO: numero de elemtos incorrecto\n");
+            comprobacion = false;
+        }
+        else if(Gestor.mapaPersonas.get(comando[2])==null){
+            bw.write("GCOBRO: Usuario inexistente\n");
+            comprobacion =false;
+        }
+        else if(!((Gestor.mapaPersonas.get(comando[2]))instanceof Usuario)){
+            bw.write("GCOBRO: Usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(!fichero.exists()){
+            bw.write("GCOBRO: Archivo inexistente\n");
+            comprobacion = false;
+        }
+        else{
+            bw.write("GCOBRO:\n");
+            Scanner entrada = new Scanner(fichero);
+            int contador =1;
+            while (entrada.hasNextLine()){
+                int id = Integer.parseInt(entrada.nextLine().trim());
+
+                if(Gestor.mapaActividades.get(id)==null){
+                    bw.write("\tError en linea <"+contador+">: Actividad inexistente <"+id+">\n");
+                }
+                else if(!((Usuario)Gestor.mapaPersonas.get(comando[2])).isMatriculado(id)){
+                    bw.write("\tError en linea <"+contador+">: Usuario no dado de alta <"+id+">\n");
+                }
+                else if(!((Usuario)Gestor.mapaPersonas.get(comando[2])).pagar(Gestor.mapaActividades.get(id).getCoste())){
+                    bw.write("\tError en linea <"+contador+">: Saldo insuficiente <"+id+">\n");
+                }
+                else{
+                    bw.write("\tLinea <"+contador+">: OK\n");
+                }
+                contador++;
+            }
+        }
+        bw.flush();
+        return comprobacion;
+    }
+
+    public boolean obtenerCalendario(String[] comando) throws IOException{
+        boolean comprobacion = true;
+        if(Gestor.mapaPersonas.get(comando[2])==null){
+            bw.write("OCALEN: usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(!((Gestor.mapaPersonas.get(comando[2]) instanceof Usuario))){
+            bw.write("OCALEN: usuario inexistente\n");
+            comprobacion = false;
+        }
+        else if(!((Usuario) Gestor.mapaPersonas.get(comando[2])).hasAsignaciones()){
+            bw.write("OCALEN: usuario sin asignaciones\n");
+            comprobacion = false;
+        }
+        else
+            bw.write("OCALEN: OK\n");
+        bw.flush();
+        return comprobacion;
+    }
+
+    public boolean ordenarMonitores() throws IOException{
+        int x = 0;
+        Set<String> keys = Gestor.mapaPersonas.keySet();
+        for(String key : keys){
+            if((Gestor.mapaPersonas.get(key) instanceof Monitor)){
+                x++;
+                break;
+            }
+        }
+        if(x==0){
+            bw.write("OMON: No hay monitores\n");
+            bw.flush();
+            return false;
+        }
+        else {
+            bw.write("OMON: OK\n");
+            bw.flush();
+            return true;
+        }
+    }
+
+    public boolean ordernarActividades() throws IOException{
+        Set<Integer> keys = Gestor.mapaActividades.keySet();
+        boolean comprobacion = false;
+        for(int key : keys){
+            if(Gestor.mapaActividades.get(key).calcularUsuarios()>0){
+                comprobacion = true;
+                break;
+            }
+        }
+        if(!comprobacion){
+            bw.write("OACT: No hay ningún usuario\n");
+        }
+        else
+            bw.write("OACT: OK\n");
+        bw.flush();
+        return comprobacion;
+    }
+
+    public void ordenarUsuarios() throws IOException{
+        bw.write("OUSER: OK");
+        bw.flush();
     }
 
 }
