@@ -186,4 +186,15 @@ public class Actividad implements Comparable<Actividad>{
 		else
 			return -1;
 	}
+
+}
+
+
+class comparadorIdA implements Comparator<Actividad>{
+	public int compare(Actividad a1, Actividad a2){
+		if(a1.getIdentificador() < a2.getIdentificador())
+			return 1;
+		else
+			return -1;
+	}
 }

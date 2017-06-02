@@ -140,17 +140,19 @@ public class Usuario extends Persona implements Comparable<Usuario>{
 		int duracion1 = Gestor.mapaActividades.get(idActividad).getDuracion();
 		for(int i=0; i<Gestor.mapaActividades.get(idActividad).getGrupos().size(); i++){
 			if(Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getIdGrupo()==idGrupo){
-				horaInicio1 = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getHoraInicio();
-				dia = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getDia();
+				horaInicio1 = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getHoraInicio().trim();
+				dia = Gestor.mapaActividades.get(idActividad).getGrupos().get(i).getDia().trim();
 				break;
 			}
 		}
 		int horaInicio11 = Integer.parseInt(horaInicio1.split(":")[0]);
 		for(int i=0; i<actividadesActuales.size(); i++){
+			if(actividadesActuales.get(i).getIdGrupo()==0)
+				continue;
 			Actividad a = Gestor.mapaActividades.get(actividadesActuales.get(i).getIdActividad());
 			LinkedList<Grupo> g = a.getGrupos();
 			for(int j=0; j<g.size(); j++){
-				if(g.get(j).getIdGrupo()==idGrupo&&g.get(j).getDia().equals(dia)){
+				if(g.get(j).getIdGrupo()==actividadesActuales.get(i).getIdGrupo()&&g.get(j).getDia().trim().equals(dia)){
 					String horaInicio = g.get(j).getHoraInicio();
 					int duracion = a.getDuracion();
 					int horaInicioI = Integer.parseInt(horaInicio.split(":")[0]);
@@ -162,6 +164,15 @@ public class Usuario extends Persona implements Comparable<Usuario>{
 			}
 		}
 		return comprobacion;
+	}
+
+	public void asignaGrupo(int idActividad, int idGrupo){
+		for(int i=0; i<actividadesActuales.size(); i++){
+			if(actividadesActuales.get(i).getIdActividad()==idActividad){
+				actividadesActuales.get(i).setIdGrupo(idGrupo);
+				break;
+			}
+		}
 	}
 
 	public boolean pagar(float precio){
@@ -192,4 +203,12 @@ public class Usuario extends Persona implements Comparable<Usuario>{
 		else
 			return -1;
 	}
+
 }
+
+class comparadorNombre implements Comparator<Usuario>{
+	public int compare(Usuario u1, Usuario u2){
+		return -(u1.getApellidos()+u1.getNombre()).compareTo((u2.getApellidos()+u2.getNombre()));
+	}
+}
+

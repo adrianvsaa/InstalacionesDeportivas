@@ -18,6 +18,10 @@ public class Monitor extends Persona implements Comparable<Monitor>{
 		this.gruposImpartidos = gruposImpartidos;
 	}
 
+	public LinkedList<Grupo> getGruposImpartidos(){
+		return this.gruposImpartidos;
+	}
+
 	public String toString(){
 		return super.toString()+
 				"horas asig: "+horasAsignables;
@@ -117,6 +121,12 @@ public class Monitor extends Persona implements Comparable<Monitor>{
 			return 1;
 		else
 			return -1;
+	}
+}
+
+class comparadorId implements Comparator<Monitor>{
+	public int compare(Monitor m1, Monitor m2){
+		return -m1.getDNI().compareTo(m2.getDNI());
 	}
 }
 

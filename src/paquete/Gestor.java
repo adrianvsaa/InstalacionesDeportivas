@@ -55,11 +55,10 @@ public class Gestor {
 
 			}
 		}
-		//Personas.imprimirFichero();
 
 
-		//Personas.imprimirPersonas();
-		//Actividades.imprimirActividades();
+		Personas.imprimirPersonas();
+		Actividades.imprimirActividades();
 	}
 
 	public static void insertaPersona(String[] comando) throws IOException{
@@ -109,7 +108,7 @@ public class Gestor {
 	public static void asignaGrupo(String[] comando) throws IOException{
 		if(!gestorErrores.asignaGrupo(comando))
 			return;
-
+		((Usuario)mapaPersonas.get(comando[2])).asignaGrupo(Integer.parseInt(comando[3]), Integer.parseInt(comando[4]));
 	}
 
 	public static void pagoActividades(String[] comando) throws IOException{
@@ -133,17 +132,21 @@ public class Gestor {
 						bw.write(grupos2.get(j).getHoraInicio()+"; ");
 						bw.write(grupos2.get(j).getIdGrupo()+"; ");
 						bw.write(mapaActividades.get(grupos2.get(j).getIdActividad()).getNombre()+"; ");
-						//Corregir esto; esto es el coordinador no el monitor que la imparte
-						if(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador())!=null) {
-							bw.write(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador()).getNombre() + " ");
-							bw.write(mapaPersonas.get(mapaActividades.get(grupos2.get(j).getIdActividad()).getCoordinador()).getApellidos() + "\n");
+						Set<String> keys = mapaPersonas.keySet();
+						for(String key: keys){
+							if(mapaPersonas.get(key) instanceof Monitor){
+								for(int z=0; z<((Monitor)mapaPersonas.get(key)).getGruposImpartidos().size(); z++){
+									if(((Monitor)mapaPersonas.get(key)).getGruposImpartidos().get(z).getIdActividad()==grupos2.get(j).getIdActividad() &&
+											((Monitor)mapaPersonas.get(key)).getGruposImpartidos().get(z).getIdGrupo() == grupos2.get(j).getIdGrupo()){
+										bw.write(mapaPersonas.get(key).getApellidos()+" ");
+										bw.write(mapaPersonas.get(key).getNombre());
+									}
+								}
+							}
 						}
-						else{
-							bw.write(" No hay instructor\n");
-						}
+						bw.write("\n");
 					}
 				}
-
 			}
 		}
 		bw.flush();
@@ -160,6 +163,7 @@ public class Gestor {
 			if(mapaPersonas.get(key) instanceof Monitor)
 				monitors.add((Monitor)mapaPersonas.get(key));
 		}
+		Collections.sort(monitors, new comparadorId());
 		Collections.sort(monitors);
 		for(int i=0; i<monitors.size(); i++){
 			monitors.get(i).salidaFichero(bw);
@@ -175,6 +179,7 @@ public class Gestor {
 		File f = new File(comando[2]);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f, false));
 		LinkedList<Actividad> a = new LinkedList<Actividad>(mapaActividades.values());
+		Collections.sort(a, new comparadorIdA());
 		Collections.sort(a);
 		for(int i=0; i<a.size(); i++){
 			a.get(i).salidaFichero(bw);
@@ -194,6 +199,7 @@ public class Gestor {
 		}
 		File f = new File(comando[2]);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f, false));
+		Collections.sort(users, new comparadorNombre());
 		Collections.sort(users);
 		for(int i=0; i<users.size(); i++){
 			users.get(i).salidaFichero(bw);
